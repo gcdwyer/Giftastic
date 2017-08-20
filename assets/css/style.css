@@ -1,7 +1,20 @@
-/*#label {
+.animal {
+	margin: 5px;
+	height: 40px;
+}
+
+#animalInput, #addButton {
+	float: right;
 	margin: 5px;
 }
-*/
-.image {
+
+.row {
 	margin: 5px;
 }
+
+.gif {
+	margin-bottom: 10px;
+}
+
+
+

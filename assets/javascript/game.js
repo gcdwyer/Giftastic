@@ -12,15 +12,17 @@ $(document).ready(function() {
       		method: 'GET'
     	}).done(function(response) {
 
-      		console.log(response);
+    		console.log("response ============= " + response);
 
+    		var results = response.data;
+      		
       		for (var i = 0; i < 10; i++) {
 
       			// RATING ======================================
 
-      			var imageDiv = $("<div class='image'>");
+      			var imageDiv = $("<div>");
       			
-      			var rating = response.data[i].rating;
+      			var rating = results[i].rating;
 
       			var p = $("<p>").text("Rating: " + rating);
 
@@ -28,50 +30,43 @@ $(document).ready(function() {
 
       			// IMAGE ========================================
 
-      			var imageURL = response.data[i].images.fixed_height_still.url;
+      			var imageURL = results[i].images.fixed_height_still.url;
 
       			var image = $("<img>")
 	      			.attr("src", imageURL)
 	      			.attr("class", "gif")
 	 				.attr("data-state", "still")
-	     			.attr("data-still", response.data[i].images.fixed_height_still.url)
-	      			.attr("data-animate", response.data[i].images.fixed_height.url);
-
-      			console.log("my image: " + image);
-      			console.log("my animal: " + animal);
+	     			.attr("data-still", results[i].images.fixed_height_still.url)
+	      			.attr("data-animate", results[i].images.fixed_height.url);
 
       			imageDiv.append(image);
 
       			$("#image-view").prepend(imageDiv);
-
-      			
       		}
-    	});
-	}
 
-	// ANIMATE ===============================================================================
+    		// ANIMATE ================================================================
 
-	$(".gif").on("click", function() {
+      		$(".gif").on("click", function() {
 		
-		var state = $(this).attr("data-state");
+				var state = $(this).attr("data-state");
 
-		console.log("state: " + state);
+				console.log("state: " + state);
 
-		if (state === "still") {
+				if (state === "still") {
 
-			$(this).attr("src", $(this).attr("data-animate"));
+					$(this).attr("src", $(this).attr("data-animate"));
 
-			$(this).attr("data-state", "animate");
+					$(this).attr("data-state", "animate");
 
-		} else {
+				} else {
 
-			$(this).attr("src", $(this).attr("data-still"));
+					$(this).attr("src", $(this).attr("data-still"));
 
-			$(this).attr("data-state", "still");
-		}
-
-	});
-
+					$(this).attr("data-state", "still");
+				}
+			})
+    	})
+	}
 
 	// creates the buttons
 	function renderButtons() {
@@ -82,26 +77,32 @@ $(document).ready(function() {
 
 		for (var i = 0; i < topics.length; i++) {
 			
-			var a = $("<button>");
-
-			a.addClass("image");
-
-			a.attr("data-name", topics[i]);
-
-			a.text(topics[i]);
+			var a = $("<button>")
+				.addClass("animal")
+				.attr("data-name", topics[i])
+				.text(topics[i]);
 
 			$("#button-view").append(a);
 		}
 	}
 
-	//api.giphy.com/v1/gifs/search?q=monster&api_key=2dabfa0142724e0f83be17b2f505b38d
+	$("#addButton").on("click", function() {
 
-	$(document).on("click", ".image", displayLabels);
+		var animal = $("#animalInput").val().trim();
 
-	
+		console.log("new animal: " + animal);
 
-	// displayLabels();
+		topics.push(animal);
+
+		renderButtons();
+		// clears last entry
+		$("#animalInput").val("");
+
+	})
+
+	$(document).on("click", ".animal", displayLabels);
 
 	renderButtons();
 
 });
+
